@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="page-heading"><div><p class="eyebrow">OVERVIEW / 01</p><h1>Dashboard<span class="accent">.</span></h1><p class="subheading">A clear view of your gym's daily operations.</p></div><a class="btn btn-primary" href="{{ url_for('main.members') }}#add-member">＋ Add member</a></div>
+<div class="hero-banner"><div><p class="eyebrow light">WELCOME BACK, ADMIN</p><h2>Build strength.<br><span>Track progress.</span></h2><p>Manage your community, coaches and memberships in one place.</p></div><div class="hero-art" aria-hidden="true"><div class="hero-ring"></div><div class="hero-bar">━</div></div><div class="hero-number">01 <span>/ CONTROL CENTER</span></div></div>
+<div class="stats-grid">
+  <article class="stat-card"><div class="stat-top"><span>Total members</span><span class="stat-icon orange">♙</span></div><div class="stat-value">{{ stats.members }}</div><div class="stat-foot"><span class="tiny-line"></span> All registered members</div></article>
+  <article class="stat-card"><div class="stat-top"><span>Active members</span><span class="stat-icon green">↗</span></div><div class="stat-value">{{ stats.active_members }}</div><div class="stat-foot"><span class="positive">●</span> Currently active</div></article>
+  <article class="stat-card"><div class="stat-top"><span>Personal trainers</span><span class="stat-icon purple">♧</span></div><div class="stat-value">{{ stats.trainers }}</div><div class="stat-foot">Coaching team members</div></article>
+  <article class="stat-card"><div class="stat-top"><span>Membership plans</span><span class="stat-icon blue">◇</span></div><div class="stat-value">{{ stats.plans }}</div><div class="stat-foot">Available packages</div></article>
+</div>
+<div class="content-grid">
+  <section class="panel"><div class="panel-heading"><div><p class="eyebrow">COMMUNITY</p><h3>Recently added members</h3></div><a class="text-link" href="{{ url_for('main.members') }}">View all ↗</a></div>
+    {% if recent %}<div class="member-list">{% for m in recent %}<div class="member-row"><div class="member-avatar">{{ m.full_name[:1]|upper }}</div><div class="member-info"><strong>{{ m.full_name }}</strong><small>{{ m.email }}</small></div><span class="pill {{ 'pill-green' if m.status == 'Active' else 'pill-muted' }}">{{ m.status }}</span></div>{% endfor %}</div>{% else %}<div class="empty-state">No members yet. Add your first member to get started.</div>{% endif %}
+  </section>
+  <section class="panel dark-panel"><div class="panel-heading"><div><p class="eyebrow light">MEMBERSHIP TRACKER</p><h3>Upcoming expirations</h3></div><span class="panel-icon">◷</span></div>
+    {% if upcoming %}{% for u in upcoming %}<div class="expiry-row"><div><strong>{{ u.full_name }}</strong><small>{{ u.plan_name }}</small></div><span>{{ u.end_date }}</span></div>{% endfor %}{% else %}<div class="empty-state light-empty">No upcoming expirations to display. Assign a membership to start tracking.</div>{% endif %}
+    <a class="btn btn-outline-light" href="{{ url_for('main.memberships') }}">Manage memberships ↗</a>
+  </section>
+</div>
+{% endblock %}

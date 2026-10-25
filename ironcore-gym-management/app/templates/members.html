@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Members{% endblock %}
+{% block content %}
+<div class="page-heading"><div><p class="eyebrow">PEOPLE / 02</p><h1>Members<span class="accent">.</span></h1><p class="subheading">Keep your member directory organized and up to date.</p></div><a class="btn btn-primary" href="#add-member">＋ Add member</a></div>
+<div class="toolbar"><form class="search-form" method="get"><span>⌕</span><input name="q" value="{{ search }}" placeholder="Search name, email or phone..." aria-label="Search members"><button class="btn btn-secondary" type="submit">Search</button>{% if search %}<a class="clear-link" href="{{ url_for('main.members') }}">Clear</a>{% endif %}</form><span class="result-count">{{ members|length }} member{{ '' if members|length == 1 else 's' }}</span></div>
+<div class="panel table-panel"><div class="table-scroll"><table><thead><tr><th>MEMBER</th><th>PHONE</th><th>GENDER</th><th>JOINED</th><th>STATUS</th><th>ACTIONS</th></tr></thead><tbody>
+{% for m in members %}<tr><td><div class="table-person"><span class="member-avatar">{{ m.full_name[:1]|upper }}</span><span><strong>{{ m.full_name }}</strong><small>{{ m.email }}</small></span></div></td><td>{{ m.phone or '—' }}</td><td>{{ m.gender or '—' }}</td><td>{{ m.joined_on }}</td><td><span class="pill {{ 'pill-green' if m.status == 'Active' else 'pill-muted' }}">{{ m.status }}</span></td><td><div class="actions"><a class="btn btn-small btn-secondary" href="{{ url_for('main.edit_member', member_id=m.id) }}">Edit</a><form method="post" action="{{ url_for('main.delete_member', member_id=m.id) }}" data-confirm="Delete {{ m.full_name }}? This cannot be undone."><button class="btn btn-small btn-danger" type="submit">Delete</button></form></div></td></tr>
+{% else %}<tr><td colspan="6"><div class="empty-state">No members found. Try another search or add a member below.</div></td></tr>{% endfor %}
+</tbody></table></div></div>
+<section class="panel form-panel" id="add-member"><div class="panel-heading"><div><p class="eyebrow">NEW PROFILE</p><h3>Add a member</h3></div><span class="panel-icon">＋</span></div><form method="post" class="form-grid">
+<label>Full name <input name="full_name" required maxlength="100" placeholder="e.g. Asha Kumar"></label>
+<label>Email address <input name="email" type="email" required maxlength="150" placeholder="asha@example.com"></label>
+<label>Phone number <input name="phone" type="tel" maxlength="25" placeholder="+91 98765 43210"></label>
+<label>Gender <select name="gender"><option value="">Select gender</option><option>Female</option><option>Male</option><option>Non-binary</option><option>Prefer not to say</option></select></label>
+<label>Status <select name="status"><option>Active</option><option>Inactive</option></select></label>
+<div class="form-actions"><button class="btn btn-primary" type="submit">Create member ↗</button></div>
+</form></section>
+{% endblock %}

@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}IronCore Gym{% endblock %} | IronCore</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="{{ url_for('main.dashboard') }}"><span class="brand-mark">IC</span><span>IRONCORE<small>GYM MANAGEMENT</small></span></a>
+    <div class="nav-label">WORKSPACE</div>
+    <nav>
+      <a class="{{ 'active' if request.endpoint == 'main.dashboard' else '' }}" href="{{ url_for('main.dashboard') }}"><span>▦</span> Dashboard</a>
+      <a class="{{ 'active' if request.endpoint in ['main.members','main.edit_member'] else '' }}" href="{{ url_for('main.members') }}"><span>♙</span> Members</a>
+      <a class="{{ 'active' if request.endpoint in ['main.trainers'] else '' }}" href="{{ url_for('main.trainers') }}"><span>♧</span> Trainers</a>
+      <a class="{{ 'active' if request.endpoint == 'main.plans' else '' }}" href="{{ url_for('main.plans') }}"><span>◇</span> Membership plans</a>
+      <a class="{{ 'active' if request.endpoint == 'main.memberships' else '' }}" href="{{ url_for('main.memberships') }}"><span>▤</span> Memberships</a>
+    </nav>
+    <div class="sidebar-bottom"><div class="status-dot"></div><div><strong>System online</strong><small>Local development mode</small></div></div>
+  </aside>
+  <main class="main">
+    <header class="topbar"><div class="mobile-brand">IRONCORE <span>ADMIN</span></div><div class="topbar-right"><span class="live-dot"></span> Admin workspace <div class="avatar">AD</div></div></header>
+    <section class="page-content">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}<div class="flash-wrap">{% for category, message in messages %}<div class="flash {{ category }}">{{ message }}<button type="button" aria-label="Dismiss" onclick="this.parentElement.remove()">×</button></div>{% endfor %}</div>{% endif %}
+      {% endwith %}
+      {% block content %}{% endblock %}
+      <footer>IRONCORE GYM MANAGEMENT <span>•</span> Built for stronger operations</footer>
+    </section>
+  </main>
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
